@@ -13,28 +13,15 @@ public class Item {
      * Material type.
      */
     public enum Material {
-        Food,
-        PaperCardboard,
-        AluminumSteel,
-        MetalOther,
-        Glass,
-        Plastic1,
-        Plastic2,
-        Plastic3,
-        Plastic4,
-        Plastic5,
-        Plastic6,
-        Plastic7,
-        Plastic7PLA
+        Food, PaperCardboard, AluminumSteel, MetalOther, Glass, Plastic1, Plastic2, Plastic3, Plastic4, Plastic5,
+        Plastic6, Plastic7, Plastic7PLA
     }
 
     /**
      * State of the item.
      */
     public enum State {
-        Falling,
-        Grabbed,
-        Destroy
+        Falling, Grabbed, Destroy
     }
 
     /**
@@ -208,7 +195,7 @@ public class Item {
             }
         }
 
-        //Check for out of bounds.
+        // Check for out of bounds.
         if (Position.getY() > Main.HEIGHT) {
             Bin = null;
             CurrentState = State.Destroy;
@@ -239,6 +226,17 @@ public class Item {
         Position.setX(POS_NULL);
         Position.setY(POS_NULL);
         Dead = true;
+    }
+
+    public boolean isPlastic() {
+        Material mat = MaterialType;
+        if (mat == Material.Plastic1 || mat == Material.Plastic2 || mat == Material.Plastic3 || mat == Material.Plastic4
+                || mat == Material.Plastic5 || mat == Material.Plastic6 || mat == Material.Plastic7
+                || mat == Material.Plastic7PLA) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
