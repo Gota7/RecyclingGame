@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "raylib-2018.10-win64.jar"
+    ]
+}
