@@ -1,5 +1,6 @@
 package com.grey20;
 
+import org.w3c.dom.Text;
 import raylib.*;
 
 import java.util.ArrayList;
@@ -37,6 +38,21 @@ public class Main {
      * Timer.
      */
     private static float Timer = 0;
+
+    /**
+     * Message timer.
+     */
+    private static float MessageTimer = 0;
+
+    /**
+     * Current message.
+     */
+    private static String CurrentMessage = null;
+
+    /**
+     * Current texture.
+     */
+    private static Texture2D CurrentTexture = null;
 
     /**
      * If game over.
@@ -130,6 +146,10 @@ public class Main {
         Resources.Textures.put("Plastic7", LoadTexture("plastic7.png"));
         Resources.Textures.put("Plastic7PLA", LoadTexture("plastic7pla.png"));
         Resources.Textures.put("Bins", LoadTexture("Bins.png"));
+        Resources.Textures.put("DeadBird", LoadTexture("deadBird.png"));
+        Resources.Textures.put("DeadFish", LoadTexture("deadFish.png"));
+        Resources.Textures.put("DeadTree", LoadTexture("deadTree.png"));
+        Resources.Textures.put("DeadTurtle", LoadTexture("deadTurtle.png"));
     }
 
     /**
@@ -177,10 +197,18 @@ public class Main {
         DrawText("Money: $" + Resources.Money, 10, 10, 50, Resources.White);
 
         // Kills
-        DrawText("Kills: " + Resources.Kills, 10, 50, 50, Resources.White);
+        DrawText("Kills: " + Resources.Kills, 10, 60, 50, Resources.White);
 
         // Bins.
         DrawTexture(Resources.Textures.get("Bins"), 0, 0, Resources.White);
+
+        //Current message.
+        if (CurrentMessage != null) {
+            DrawText(CurrentMessage, 150, 300, 40, Resources.White);
+            if (CurrentTexture != null) {
+                DrawTexture(CurrentTexture, 500, 275, Resources.White);
+            }
+        }
 
         // Draw items.
         for (int i = 0; i < Items.size(); i++) {
@@ -203,6 +231,12 @@ public class Main {
                 InitGame();
             }
             return;
+        }
+
+        // Current message.
+        MessageTimer--;
+        if (MessageTimer <= 0) {
+            CurrentMessage = null;
         }
 
         // Spawn item if needed.
@@ -265,7 +299,9 @@ public class Main {
 
         if (item.Bin == null) {
             answer += groundPunishment;
-            System.out.println("You've killed 5 fish.");
+            CurrentMessage = "You've killed 5 fish.";
+            CurrentTexture = Resources.Textures.get("DeadFish");
+            MessageTimer = 60;
             killCount += 5;
         } else if (item.Bin.equals("Compost")) {
             if (item.MaterialType == Material.Plastic7PLA) {
@@ -274,7 +310,9 @@ public class Main {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
                 answer += plasticPunishments[2];
-                System.out.println("You've killed a tree.");
+                CurrentMessage = "You've killed a tree.";
+                CurrentTexture = Resources.Textures.get("DeadTree");
+                MessageTimer = 60;
                 killCount++;
             } else {
                 answer += otherPunishments;
@@ -284,15 +322,18 @@ public class Main {
                 answer += plasticRewards[1];
             } else if (item.MaterialType == Material.Plastic4 || item.MaterialType == Material.Plastic5) {
                 answer += plasticRewards[3];
-                System.out.println("Although plastic 4 (LDPE) and plastic 5 (PPE) are technically recyclable, \n"
-                        + "whether or not they can be recycled may depend on where you are located. \n"
-                        + "Check with your local recycling collection services first.");
+                CurrentMessage = "Although plastic 4 (LDPE) and plastic 5\n"
+                        + " (PPE) can be recycled, this\nis not for every location.";
+                MessageTimer = 150;
+                CurrentTexture = null;
             } else if (item.MaterialType == Material.AluminumSteel || item.MaterialType == Material.PaperCardboard
                     || item.MaterialType == Material.Glass) {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
                 answer += plasticPunishments[3];
-                System.out.println("You've killed a raccoon.");
+                CurrentMessage = "You've killed a raccoon.";
+                CurrentTexture = null;
+                MessageTimer = 60;
                 killCount++;
             } else {
                 answer += otherPunishments;
@@ -302,14 +343,17 @@ public class Main {
                 answer += plasticRewards[0];
             } else if (item.MaterialType == Material.Plastic6) {
                 answer += plasticRewards[3];
-                System.out
-                        .println("Although it is rare, it is sometimes actually possible to recycle plastic 6 (PS). \n"
-                                + "Check with your local recycling collection services to make sure.");
+                CurrentMessage = "Sometimes its possible to\nrecycle plastic 6 (PS).\n"
+                                + "Consult your local recycling\ncollection services.";
+                CurrentTexture = null;
+                MessageTimer = 150;
             } else if (item.MaterialType == Material.Plastic7) {
                 answer += plasticRewards[1];
             } else if (item.isPlastic()) {
                 answer += plasticPunishments[0];
-                System.out.println("You've killed a turtle.");
+                CurrentMessage = "You've killed a turtle.";
+                CurrentTexture = Resources.Textures.get("DeadTurtle");
+                MessageTimer = 60;
                 killCount++;
             } else {
                 answer += otherPunishments;
@@ -319,7 +363,9 @@ public class Main {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
                 answer += plasticPunishments[1];
-                System.out.println("You've killed a bird.");
+                CurrentMessage = "You've killed a bird.";
+                CurrentTexture = Resources.Textures.get("DeadBird");
+                MessageTimer = 60;
                 killCount++;
             } else {
                 answer += otherPunishments;

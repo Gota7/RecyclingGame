@@ -37,7 +37,7 @@ public class Item {
     /**
      * Acceleration increase per level.
      */
-    public static final float LEVEL_INCREMENT_ACCLERATION = 0.001f;
+    public static final float LEVEL_INCREMENT_ACCLERATION = 0.003f;
 
     /**
      * Initial speed of the item.
@@ -47,7 +47,7 @@ public class Item {
     /**
      * Speed increment for level.
      */
-    public static final float LEVEL_INCREMENT_SPEED = .1f;
+    public static final float LEVEL_INCREMENT_SPEED = .3f;
 
     /**
      * It's fun!

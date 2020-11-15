@@ -40,7 +40,7 @@ public class Resources {
      * @return The current level.
      */
     public static long GetLevel() {
-        return NumSuccesses / 10;
+        return NumSuccesses / 5;
     }
 
     /**
