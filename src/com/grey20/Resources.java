@@ -24,15 +24,15 @@ public class Resources {
     public static Color White = new Color(255, 255, 255);
 
     /**
-     * Money the player has.
+     * Money and kills the player has.
      */
     public static long Money = 50;
     public static long Kills = 0;
 
-    /**
-     * Number of times the player has entered something successfully.
-     */
-    public static long NumSuccesses;
+    // /**
+    // * Number of times the player has entered something successfully.
+    // */
+    public static long NumSuccesses = 0;
 
     /**
      * Get the current level the player is on.
