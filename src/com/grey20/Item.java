@@ -165,4 +165,17 @@ public class Item {
         Dead = true;
     }
 
+    public boolean isPlastic()
+    {
+        Material mat = MaterialType;
+        if(mat == Material.Plastic1 ||mat == Material.Plastic2 ||mat == Material.Plastic3 ||mat == Material.Plastic4 ||mat == Material.Plastic5 ||mat == Material.Plastic6 ||mat == Material.Plastic7||mat == Material.Plastic7PLA)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }
