@@ -31,7 +31,7 @@ public class Main {
     /**
      * Fun value.
      */
-    public static final float FUN_VALUE = 150;
+    public static final float FUN_VALUE = 130;
 
     /**
      * Timer.
@@ -168,8 +168,8 @@ public class Main {
 
         // Game over.
         if (IsGameOver) {
-            DrawText("GAMEOVER", 100, 100, 100, Resources.White);
-            DrawText("Right click to play again!", 200, 300, 30, Resources.White);
+            DrawText("GAMEOVER", 210, 300, 100, Resources.Red);
+            DrawText("Right click to play again!", 310, 400, 30, Resources.White);
             return;
         }
 
@@ -177,7 +177,7 @@ public class Main {
         DrawText("Money: $" + Resources.Money, 10, 10, 50, Resources.White);
 
         // Kills
-        DrawText("Kills: " + Resources.Kills, 10, 50, 50, Resources.White);
+        DrawText("Kills: " + Resources.Kills, 10, 60, 50, Resources.Red);
 
         // Bins.
         DrawTexture(Resources.Textures.get("Bins"), 0, 0, Resources.White);
