@@ -63,6 +63,9 @@ public class Main {
             put("Plastic3", Item.Material.Plastic3);
             put("Plastic4", Item.Material.Plastic4);
             put("Plastic5", Item.Material.Plastic5);
+            put("Plastic6", Item.Material.Plastic6);
+            put("Plastic7", Item.Material.Plastic7);
+            put("Plastic7PLA", Item.Material.Plastic7PLA);
         }
     };
 
@@ -123,6 +126,9 @@ public class Main {
         Resources.Textures.put("Plastic3", LoadTexture("plastic3.png"));
         Resources.Textures.put("Plastic4", LoadTexture("plastic4.png"));
         Resources.Textures.put("Plastic5", LoadTexture("plastic5.png"));
+        Resources.Textures.put("Plastic6", LoadTexture("plastic6.png"));
+        Resources.Textures.put("Plastic7", LoadTexture("plastic7.png"));
+        Resources.Textures.put("Plastic7PLA", LoadTexture("plastic7pla.png"));
         Resources.Textures.put("Bins", LoadTexture("Bins.png"));
     }
 
