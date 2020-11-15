@@ -62,4 +62,42 @@ public class Main {
         return false;
     }
 
+
+    public static double monetaryChange (Item item)
+    {
+        final int [] plasticPunishments = {-10,-15,-5,-7};
+        final int [] platicRewards = {20,
+        final int otherPunishments =-1;
+        final int groundPunishment = -20;
+
+        boolean isPlastic = item.isPlastic();
+        int answer = 0;
+
+        if(item.Bin.equals("Compost"))
+        {
+            if(item.MaterialType==item.Material.Food||item.MaterialType==item.Material.Plastic7PLA)
+            {
+                int answer = ;
+            }
+            else
+            {
+            }
+        }
+        else if(item.Bin.equals("Recycling"))
+        {
+
+        }
+        else if(item.Bin.equals("Trash"))
+        {
+
+        }
+        else if (item.Bin.equals("Scrap"))
+        {
+
+        }
+        else
+        {
+            answer = groundPunishment;
+        }
+    }
 }
