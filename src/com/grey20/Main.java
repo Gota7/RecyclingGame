@@ -150,6 +150,7 @@ public class Main {
         Resources.Textures.put("DeadFish", LoadTexture("deadFish.png"));
         Resources.Textures.put("DeadTree", LoadTexture("deadTree.png"));
         Resources.Textures.put("DeadTurtle", LoadTexture("deadTurtle.png"));
+        Resources.Textures.put("DeadRaccoon", LoadTexture("deadRaccoon.png"));
     }
 
     /**
@@ -332,7 +333,7 @@ public class Main {
             } else if (item.isPlastic()) {
                 answer += plasticPunishments[3];
                 CurrentMessage = "You've killed a raccoon.";
-                CurrentTexture = null;
+                CurrentTexture = Resources.Textures.get("DeadRaccoon");
                 MessageTimer = 60;
                 killCount++;
             } else {
