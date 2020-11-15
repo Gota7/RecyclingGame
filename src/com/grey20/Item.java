@@ -13,28 +13,15 @@ public class Item {
      * Material type.
      */
     public enum Material {
-        Food,
-        PaperCardboard,
-        AluminumSteel,
-        MetalOther,
-        Glass,
-        Plastic1,
-        Plastic2,
-        Plastic3,
-        Plastic4,
-        Plastic5,
-        Plastic6,
-        Plastic7,
-        Plastic7PLA
+        Food, PaperCardboard, AluminumSteel, MetalOther, Glass, Plastic1, Plastic2, Plastic3, Plastic4, Plastic5,
+        Plastic6, Plastic7, Plastic7PLA
     }
 
     /**
      * State of the item.
      */
     public enum State {
-        Falling,
-        Grabbed,
-        Destroy
+        Falling, Grabbed, Destroy
     }
 
     /**
@@ -123,17 +110,17 @@ public class Item {
      */
     private void DoFallState() {
 
-        //Get vars.
-        //Velocity = new Vector2();
+        // Get vars.
+        // Velocity = new Vector2();
 
-        //Check for grabbing.
+        // Check for grabbing.
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             if (Main.UpdateBinIntersection(this)) {
                 CurrentState = State.Grabbed;
             }
         }
 
-        //Check for out of bounds.
+        // Check for out of bounds.
         if (Position.getY() > Main.HEIGHT) {
             Bin = null;
             CurrentState = State.Destroy;
@@ -165,15 +152,13 @@ public class Item {
         Dead = true;
     }
 
-    public boolean isPlastic()
-    {
+    public boolean isPlastic() {
         Material mat = MaterialType;
-        if(mat == Material.Plastic1 ||mat == Material.Plastic2 ||mat == Material.Plastic3 ||mat == Material.Plastic4 ||mat == Material.Plastic5 ||mat == Material.Plastic6 ||mat == Material.Plastic7||mat == Material.Plastic7PLA)
-        {
+        if (mat == Material.Plastic1 || mat == Material.Plastic2 || mat == Material.Plastic3 || mat == Material.Plastic4
+                || mat == Material.Plastic5 || mat == Material.Plastic6 || mat == Material.Plastic7
+                || mat == Material.Plastic7PLA) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
