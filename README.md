@@ -1,2 +1,2 @@
 # RecyclingGame
-For a hackathon project.
+Recycling but brutal.
