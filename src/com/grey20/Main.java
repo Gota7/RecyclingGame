@@ -76,7 +76,10 @@ public class Main {
         final int otherPunishments = -4;
         final int groundPunishment = -20;
 
-        if (item.Bin.equals("Compost")) {
+        if (item.Bin == null) {
+            answer += groundPunishment;
+            System.out.println("You've killed 5 fish.");
+        } else if (item.Bin.equals("Compost")) {
             if (item.MaterialType == Material.Plastic7PLA) {
                 answer += plasticRewards[3];
             } else if (item.MaterialType == Material.Food) {
@@ -126,9 +129,6 @@ public class Main {
             } else {
                 answer += otherPunishments;
             }
-        } else {
-            answer += groundPunishment;
-            System.out.println("You've killed 5 fish.");
         }
         int[] retVal = { answer, killCount };
         return retVal;
