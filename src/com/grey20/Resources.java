@@ -26,7 +26,7 @@ public class Resources {
     /**
      * Money the player has.
      */
-    public static long Money;
+    public static long Money = 50;
 
     /**
      * Number of times the player has entered something successfully.

@@ -129,7 +129,7 @@ public class Item {
 
         //General setup maths.
         HitboxWidthHeight = new Vector2(Resources.Textures.get(textureName).getWidth(), Resources.Textures.get(textureName).getHeight());
-        Position = new Vector2((float)Math.random() * (Main.WIDTH - HitboxWidthHeight.getX()) * 3, 10 - HitboxWidthHeight.getY());
+        Position = new Vector2((float)Math.random() * (Main.WIDTH - HitboxWidthHeight.getX()), 10 - HitboxWidthHeight.getY());
         InitVelocity();
         Acceleration = new Vector2(0, BASE_ACCELERATION + Resources.GetLevel() * LEVEL_INCREMENT_ACCLERATION);
 
@@ -139,7 +139,7 @@ public class Item {
      * Initialize velocity.
      */
     private void InitVelocity() {
-        Velocity = new Vector2((INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED) * (Math.random() >= .5f ? -1 : 1), INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED);
+        Velocity = new Vector2((INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED) * 3 * (Math.random() >= .5f ? -1 : 1), INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED);
     }
 
     /**

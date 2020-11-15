@@ -39,6 +39,11 @@ public class Main {
     private static float Timer = 0;
 
     /**
+     * If game over.
+     */
+    private static boolean IsGameOver;
+
+    /**
      * Current items in the game.
      */
     public static ArrayList<Item> Items = new ArrayList<Item>();
@@ -53,13 +58,25 @@ public class Main {
     };
 
     /**
+     * Bin hitboxes.
+     */
+    public static final HashMap<String, Vector2[]> BIN_HITBOXES = new HashMap<>() {
+        {
+            put("Trash", new Vector2[] { new Vector2(132, 449), new Vector2(194, 264) });
+            put("Recycling", new Vector2[] { new Vector2(358, 463), new Vector2(184, 235) });
+            put("Compost", new Vector2[] { new Vector2(562, 503), new Vector2(206, 200) });
+            put("Scrap", new Vector2[] { new Vector2(772, 471), new Vector2(221, 244) });
+        }
+    };
+
+    /**
      * Main.
      */
     public static void main(String[] args) {
         InitWindow(WIDTH, HEIGHT, "Recycling Game");
         SetTargetFPS(60);
         Texture2D bg = LoadTexture("BG.png");
-        Resources.Textures.put("Bins", LoadTexture("Bins.png"));
+        InitGame();
         InitResources();
         SpawnItem();
         while (!WindowShouldClose()) {
@@ -74,10 +91,20 @@ public class Main {
     }
 
     /**
+     * Init game.
+     */
+    private static void InitGame() {
+        Resources.NumSuccesses = 0;
+        Resources.Money = 50;
+        IsGameOver = false;
+    }
+
+    /**
      * Init resources.
      */
     public static void InitResources() {
         Resources.Textures.put("Paper", LoadTexture("Paper.png"));
+        Resources.Textures.put("Bins", LoadTexture("Bins.png"));
     }
 
     /**
@@ -116,6 +143,13 @@ public class Main {
      */
     public static void Draw() {
 
+        //Game over.
+        if (IsGameOver) {
+            DrawText("GAMEOVER", 100, 100, 100, Resources.White);
+            DrawText("Right click to play again!", 200, 300, 30, Resources.White);
+            return;
+        }
+
         //Money.
         DrawText("Money: $" + Resources.Money, 10, 10, 50, Resources.White);
 
@@ -134,6 +168,15 @@ public class Main {
      */
     public static void Update() {
 
+        //Game over.
+        if (Resources.Money < 0) { IsGameOver = true; }
+        if (IsGameOver) {
+            if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+                InitGame();
+            }
+            return;
+        }
+
         //Spawn item if needed.
         Timer++;
         if (Timer > Math.max(FUN_VALUE - Resources.GetLevel() * 5, 10)) {
@@ -149,7 +192,11 @@ public class Main {
         //Remove dead items.
         for (int i = Items.size() - 1; i >= 0; i--) {
             if (Items.get(i).Dead) {
-                //TODO!!! KILL CODE!!!
+                 float money = monetaryChangeKillCount(Items.get(i))[0];
+                 if (money > 0) {
+                    Resources.NumSuccesses++;
+                 }
+                Resources.Money += money;
                 Items.remove(i);
             }
         }
@@ -164,6 +211,15 @@ public class Main {
      * @return If there is an intersection.
      */
     public static boolean UpdateBinIntersection(Item item) {
+        for (int i = 0; i < BIN_HITBOXES.size(); i++) {
+            String key = (String)BIN_HITBOXES.keySet().toArray()[i];
+            Vector2[] data = BIN_HITBOXES.get(key);
+            if (Collides(item.Position, item.HitboxWidthHeight, data[0], data[1])) {
+                item.Bin = key;
+                return true;
+            }
+        }
+        item.Bin = null;
         return false;
     }
 
@@ -177,7 +233,10 @@ public class Main {
         final int otherPunishments = -4;
         final int groundPunishment = -20;
 
-        if (item.Bin.equals("Compost")) {
+        if (item.Bin == null) {
+            answer += groundPunishment;
+            System.out.println("You've killed 5 fish.");
+        } else if (item.Bin.equals("Compost")) {
             if (item.MaterialType == Material.Plastic7PLA) {
                 answer += plasticRewards[3];
             } else if (item.MaterialType == Material.Food) {
@@ -227,9 +286,6 @@ public class Main {
             } else {
                 answer += otherPunishments;
             }
-        } else {
-            answer += groundPunishment;
-            System.out.println("You've killed 5 fish.");
         }
         int[] retVal = { answer, killCount };
         return retVal;
