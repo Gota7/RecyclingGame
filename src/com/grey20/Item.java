@@ -43,6 +43,31 @@ public class Item {
     public static final int POS_NULL = -100000;
 
     /**
+     * Base acceleration of items.
+     */
+    public static final float BASE_ACCELERATION = 0.05f;
+
+    /**
+     * Acceleration increase per level.
+     */
+    public static final float LEVEL_INCREMENT_ACCLERATION = 0.001f;
+
+    /**
+     * Initial speed of the item.
+     */
+    public static final float INITIAL_SPEED = 1/3f;
+
+    /**
+     * Speed increment for level.
+     */
+    public static final float LEVEL_INCREMENT_SPEED = .1f;
+
+    /**
+     * It's fun!
+     */
+    public static final float FUN_VALUE = 150;
+
+    /**
      * Name of the texture to display.
      */
     public String TextureName;
@@ -93,6 +118,44 @@ public class Item {
     public boolean Dead;
 
     /**
+     * Frame timer.
+     */
+    private float Timer = 0;
+
+    /**
+     * If an item is grabbed.
+     */
+    public static boolean ItemGrabbed = false;
+
+    /**
+     * Spawn an item.
+     * @param textureName Texture name.
+     * @param materialType Material type.
+     */
+    public Item(String textureName, Material materialType) {
+
+        //Init stuff.
+        Visible = true;
+        TextureName = textureName;
+        MaterialType = materialType;
+        CurrentState = State.Falling;
+
+        //General setup maths.
+        HitboxWidthHeight = new Vector2(Resources.Textures.get(textureName).getWidth(), Resources.Textures.get(textureName).getHeight());
+        Position = new Vector2((float)Math.random() * (Main.WIDTH - HitboxWidthHeight.getX()) * 3, 10 - HitboxWidthHeight.getY());
+        InitVelocity();
+        Acceleration = new Vector2(0, BASE_ACCELERATION + Resources.GetLevel() * LEVEL_INCREMENT_ACCLERATION);
+
+    }
+
+    /**
+     * Initialize velocity.
+     */
+    private void InitVelocity() {
+        Velocity = new Vector2((INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED) * (Math.random() >= .5f ? -1 : 1), INITIAL_SPEED + Resources.GetLevel() * LEVEL_INCREMENT_SPEED);
+    }
+
+    /**
      * Draw the item.
      */
     public void Draw() {
@@ -116,6 +179,7 @@ public class Item {
                 DoDestroyState();
                 break;
         }
+        Timer++;
     }
 
     /**
@@ -124,12 +188,23 @@ public class Item {
     private void DoFallState() {
 
         //Get vars.
-        //Velocity = new Vector2();
+        Velocity = new Vector2(Acceleration.getX() + Velocity.getX(), Acceleration.getY() + Velocity.getY());
+        Position = new Vector2(Position.getX() + Velocity.getX(), Position.getY() + Velocity.getY());
+        if (Position.getX() < 0) {
+            Velocity.setX(Math.abs(Velocity.getX()));
+        } else if (Position.getX() >= Main.WIDTH - HitboxWidthHeight.getX()) {
+            Velocity.setX(-Math.abs(Velocity.getX()));
+        } else if (Timer > Math.max(FUN_VALUE - Resources.GetLevel() * 10, 120)) {
+            if (Math.random() >= .5f) Velocity.setX(-Velocity.getX());
+            Timer = 0;
+        }
 
         //Check for grabbing.
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (Main.UpdateBinIntersection(this)) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !ItemGrabbed) {
+            if (Main.Collides(Position, HitboxWidthHeight, GetMousePosition(), new Vector2(1, 1))) {
                 CurrentState = State.Grabbed;
+                ItemGrabbed = true;
+                InitVelocity();
             }
         }
 
@@ -147,6 +222,7 @@ public class Item {
     private void DoGrabbingState() {
         Position = new Vector2(GetMouseX() - HitboxWidthHeight.getX() / 2, GetMouseY() - HitboxWidthHeight.getY() / 2);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            ItemGrabbed = false;
             if (Main.UpdateBinIntersection(this)) {
                 CurrentState = State.Destroy;
             } else {

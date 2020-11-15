@@ -16,7 +16,12 @@ public class Resources {
     /**
      * Textures.
      */
-    public static HashMap<String, Texture2D> Textures;
+    public static HashMap<String, Texture2D> Textures = new HashMap<>();
+
+    /**
+     * White color.
+     */
+    public static Color White = new Color(255, 255, 255);
 
     /**
      * Money the player has.
