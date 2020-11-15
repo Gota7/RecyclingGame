@@ -6,12 +6,16 @@ import static raylib.Color.*;
 import static raylib.Raylib.*;
 import static raylib.TextureFilterMode.*;
 
+/**
+ * Main class.
+ */
 public class Main {
+
     /*** runMain
      * Open and close a window just to be sure that our library is sane.
      */
     public static void main(String[] args) {
-        InitWindow(1024, 576, "Sample Window");
+        InitWindow(1000, 800, "Sample Window");
         SetTargetFPS(60);
         Vector2 pos = new Vector2(540, 200);
         Texture2D tex = LoadTexture("pig.png");
@@ -27,4 +31,9 @@ public class Main {
         }
         CloseWindow();
     }
+
+    public static boolean DoesItemIntersectWithBin(Item item) {
+        return false;
+    }
+
 }
