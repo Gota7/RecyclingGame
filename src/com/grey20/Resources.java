@@ -27,6 +27,7 @@ public class Resources {
      * Money the player has.
      */
     public static long Money = 50;
+    public static long Kills = 0;
 
     /**
      * Number of times the player has entered something successfully.
@@ -35,6 +36,7 @@ public class Resources {
 
     /**
      * Get the current level the player is on.
+     * 
      * @return The current level.
      */
     public static long GetLevel() {
@@ -43,7 +45,8 @@ public class Resources {
 
     /**
      * Draw a texture.
-     * @param id ID.
+     * 
+     * @param id  ID.
      * @param pos Position.
      */
     public static void DrawTexture(String id, Vector2 pos) {

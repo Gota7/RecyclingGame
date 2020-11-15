@@ -31,7 +31,7 @@ public class Main {
     /**
      * Fun value.
      */
-    public static final float FUN_VALUE = 200;
+    public static final float FUN_VALUE = 150;
 
     /**
      * Timer.
@@ -54,6 +54,15 @@ public class Main {
     public static final HashMap<String, Item.Material> AVAILABLE_ITEMS = new HashMap<String, Item.Material>() {
         {
             put("Paper", Item.Material.PaperCardboard);
+            put("Cardboard", Item.Material.PaperCardboard);
+            put("Food", Item.Material.Food);
+            put("Glass", Item.Material.Glass);
+            put("Brass", Item.Material.MetalOther);
+            put("Plastic1", Item.Material.Plastic1);
+            put("Plastic2", Item.Material.Plastic2);
+            put("Plastic3", Item.Material.Plastic3);
+            put("Plastic4", Item.Material.Plastic4);
+            put("Plastic5", Item.Material.Plastic5);
         }
     };
 
@@ -81,9 +90,9 @@ public class Main {
         SpawnItem();
         while (!WindowShouldClose()) {
             BeginDrawing();
-                ClearBackground(Resources.White);
-                DrawTexture(bg, 0, 0, Resources.White);
-                Draw();
+            ClearBackground(Resources.White);
+            DrawTexture(bg, 0, 0, Resources.White);
+            Draw();
             EndDrawing();
             Update();
         }
@@ -96,6 +105,7 @@ public class Main {
     private static void InitGame() {
         Resources.NumSuccesses = 0;
         Resources.Money = 50;
+        Resources.Kills = 0;
         IsGameOver = false;
     }
 
@@ -103,7 +113,16 @@ public class Main {
      * Init resources.
      */
     public static void InitResources() {
-        Resources.Textures.put("Paper", LoadTexture("Paper.png"));
+        Resources.Textures.put("Paper", LoadTexture("paper.png"));
+        Resources.Textures.put("Cardboard", LoadTexture("cardboard.png"));
+        Resources.Textures.put("Food", LoadTexture("food.png"));
+        Resources.Textures.put("Glass", LoadTexture("glass.png"));
+        Resources.Textures.put("Brass", LoadTexture("Brass.png"));
+        Resources.Textures.put("Plastic1", LoadTexture("plastic1.png"));
+        Resources.Textures.put("Plastic2", LoadTexture("plastic2.png"));
+        Resources.Textures.put("Plastic3", LoadTexture("plastic3.png"));
+        Resources.Textures.put("Plastic4", LoadTexture("plastic4.png"));
+        Resources.Textures.put("Plastic5", LoadTexture("plastic5.png"));
         Resources.Textures.put("Bins", LoadTexture("Bins.png"));
     }
 
@@ -112,27 +131,25 @@ public class Main {
      */
     private static void SpawnItem() {
 
-        //Spawn a random item.
-        int ind = (int)(Math.random() * AVAILABLE_ITEMS.size());
-        String key = (String)AVAILABLE_ITEMS.keySet().toArray()[ind];
+        // Spawn a random item.
+        int ind = (int) (Math.random() * AVAILABLE_ITEMS.size());
+        String key = (String) AVAILABLE_ITEMS.keySet().toArray()[ind];
         Items.add(new Item(key, AVAILABLE_ITEMS.get(key)));
 
     }
 
     /**
      * If two hitboxes collide.
-     * @param pos1 Position 1.
+     * 
+     * @param pos1    Position 1.
      * @param hitbox1 Hitbox 1.
-     * @param pos2 Position 2.
+     * @param pos2    Position 2.
      * @param hitbox2 Hitbox 2.
      * @return If they collide.
      */
     public static boolean Collides(Vector2 pos1, Vector2 hitbox1, Vector2 pos2, Vector2 hitbox2) {
-        if (pos1.getX() < pos2.getX() + hitbox2.getX() &&
-                pos1.getX() + hitbox1.getX() > pos2.getX() &&
-                pos1.getY() < pos2.getY() + hitbox2.getY() &&
-                pos1.getY() + hitbox1.getY() > pos2.getY())
-        {
+        if (pos1.getX() < pos2.getX() + hitbox2.getX() && pos1.getX() + hitbox1.getX() > pos2.getX()
+                && pos1.getY() < pos2.getY() + hitbox2.getY() && pos1.getY() + hitbox1.getY() > pos2.getY()) {
             return true;
         }
         return false;
@@ -143,20 +160,23 @@ public class Main {
      */
     public static void Draw() {
 
-        //Game over.
+        // Game over.
         if (IsGameOver) {
             DrawText("GAMEOVER", 100, 100, 100, Resources.White);
             DrawText("Right click to play again!", 200, 300, 30, Resources.White);
             return;
         }
 
-        //Money.
+        // Money.
         DrawText("Money: $" + Resources.Money, 10, 10, 50, Resources.White);
 
-        //Bins.
+        // Kills
+        DrawText("Kills: " + Resources.Kills, 10, 50, 50, Resources.White);
+
+        // Bins.
         DrawTexture(Resources.Textures.get("Bins"), 0, 0, Resources.White);
 
-        //Draw items.
+        // Draw items.
         for (int i = 0; i < Items.size(); i++) {
             Items.get(i).Draw();
         }
@@ -168,8 +188,10 @@ public class Main {
      */
     public static void Update() {
 
-        //Game over.
-        if (Resources.Money < 0) { IsGameOver = true; }
+        // Game over.
+        if (Resources.Money < 0 || Resources.Kills > 50) {
+            IsGameOver = true;
+        }
         if (IsGameOver) {
             if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
                 InitGame();
@@ -177,26 +199,28 @@ public class Main {
             return;
         }
 
-        //Spawn item if needed.
+        // Spawn item if needed.
         Timer++;
         if (Timer > Math.max(FUN_VALUE - Resources.GetLevel() * 5, 10)) {
             SpawnItem();
             Timer = 0;
         }
 
-        //Update items.
+        // Update items.
         for (int i = 0; i < Items.size(); i++) {
             Items.get(i).Update();
         }
 
-        //Remove dead items.
+        // Remove dead items.
         for (int i = Items.size() - 1; i >= 0; i--) {
             if (Items.get(i).Dead) {
-                 float money = monetaryChangeKillCount(Items.get(i))[0];
-                 if (money > 0) {
+                float money = monetaryChangeKillCount(Items.get(i))[0];
+                float kills = monetaryChangeKillCount(Items.get(i))[1];
+                if (money > 0 && kills < 50) {
                     Resources.NumSuccesses++;
-                 }
+                }
                 Resources.Money += money;
+                Resources.Kills += kills;
                 Items.remove(i);
             }
         }
@@ -212,7 +236,7 @@ public class Main {
      */
     public static boolean UpdateBinIntersection(Item item) {
         for (int i = 0; i < BIN_HITBOXES.size(); i++) {
-            String key = (String)BIN_HITBOXES.keySet().toArray()[i];
+            String key = (String) BIN_HITBOXES.keySet().toArray()[i];
             Vector2[] data = BIN_HITBOXES.get(key);
             if (Collides(item.Position, item.HitboxWidthHeight, data[0], data[1])) {
                 item.Bin = key;
@@ -236,14 +260,16 @@ public class Main {
         if (item.Bin == null) {
             answer += groundPunishment;
             System.out.println("You've killed 5 fish.");
+            killCount += 5;
         } else if (item.Bin.equals("Compost")) {
             if (item.MaterialType == Material.Plastic7PLA) {
-                answer += plasticRewards[3];
+                answer += plasticRewards[2];
             } else if (item.MaterialType == Material.Food) {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
-                answer += plasticPunishments[3];
+                answer += plasticPunishments[2];
                 System.out.println("You've killed a tree.");
+                killCount++;
             } else {
                 answer += otherPunishments;
             }
@@ -251,29 +277,34 @@ public class Main {
             if (item.MaterialType == Material.Plastic1 || item.MaterialType == Material.Plastic2) {
                 answer += plasticRewards[1];
             } else if (item.MaterialType == Material.Plastic4 || item.MaterialType == Material.Plastic5) {
-                answer += plasticRewards[4];
+                answer += plasticRewards[3];
                 System.out.println("Although plastic 4 (LDPE) and plastic 5 (PPE) are technically recyclable, \n"
-                        + "whether or not they can be recycled where you are located may depend. \n"
-                        + "Check witb your local collection services first before recycling.");
+                        + "whether or not they can be recycled may depend on where you are located. \n"
+                        + "Check with your local recycling collection services first.");
             } else if (item.MaterialType == Material.AluminumSteel || item.MaterialType == Material.PaperCardboard
                     || item.MaterialType == Material.Glass) {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
-                answer += plasticPunishments[4];
-                System.out.println("You've killed a deer.");
+                answer += plasticPunishments[3];
+                System.out.println("You've killed a raccoon.");
+                killCount++;
             } else {
                 answer += otherPunishments;
             }
         } else if (item.Bin.equals("Trash")) {
             if (item.MaterialType == Material.Plastic3) {
-                answer += plasticRewards[1];
+                answer += plasticRewards[0];
             } else if (item.MaterialType == Material.Plastic6) {
-                answer += plasticRewards[4];
+                answer += plasticRewards[3];
+                System.out
+                        .println("Although it is rare, it is sometimes actually possible to recycle plastic 6 (PS). \n"
+                                + "Check with your local recycling collection services to make sure.");
             } else if (item.MaterialType == Material.Plastic7) {
-                answer += plasticRewards[17];
+                answer += plasticRewards[1];
             } else if (item.isPlastic()) {
-                answer += plasticPunishments[1];
+                answer += plasticPunishments[0];
                 System.out.println("You've killed a turtle.");
+                killCount++;
             } else {
                 answer += otherPunishments;
             }
@@ -281,8 +312,9 @@ public class Main {
             if (item.MaterialType == Material.MetalOther) {
                 answer += otherRewards;
             } else if (item.isPlastic()) {
-                answer += plasticPunishments[2];
+                answer += plasticPunishments[1];
                 System.out.println("You've killed a bird.");
+                killCount++;
             } else {
                 answer += otherPunishments;
             }
