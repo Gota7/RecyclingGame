@@ -11,28 +11,54 @@ import static raylib.TextureFilterMode.*;
  */
 public class Main {
 
-    /*** runMain
-     * Open and close a window just to be sure that our library is sane.
+    /**
+     * Screen width.
+     */
+    public static final int WIDTH = 1000;
+
+    /**
+     * Screen height.
+     */
+    public static final int HEIGHT = 800;
+
+    /**
+     * Main.
      */
     public static void main(String[] args) {
-        InitWindow(1000, 800, "Sample Window");
+        InitWindow(WIDTH, HEIGHT, "Recycling Game");
         SetTargetFPS(60);
-        Vector2 pos = new Vector2(540, 200);
-        Texture2D tex = LoadTexture("pig.png");
+        Texture2D bg = LoadTexture("BG.png");
         while (!WindowShouldClose()) {
             BeginDrawing();
                 ClearBackground(new Color(255, 255, 255, 255));
-                DrawText("Hello World!", 10, 10, 20, new Color(0, 0, 0, 255));
-                DrawCircleV(pos, 15.0f, new Color(200, 0, 200, 255));
-                DrawTexture(tex, 300, 40, new Color(255, 255, 255));
+                DrawTexture(bg, 0, 0, new Color(255, 255, 255));
+                Draw();
             EndDrawing();
-            pos.setX(pos.getX() + (float)Math.random() * 10f - 3);
-            pos.setY(pos.getY() + (float)Math.random() * 10f - 3);
+            Update();
         }
         CloseWindow();
     }
 
-    public static boolean DoesItemIntersectWithBin(Item item) {
+    /**
+     * Draw stuff.
+     */
+    public static void Draw() {
+        DrawText("Money: $" + Resources.Money, 10, 10, 50, new Color(255, 255, 255));
+    }
+
+    /**
+     * Update stuff.
+     */
+    public static void Update() {
+
+    }
+
+    /**
+     * Update what bin the item intersects with, and returns if it intersects with a bin.
+     * @param item Item to update.
+     * @return If there is an intersection.
+     */
+    public static boolean UpdateBinIntersection(Item item) {
         return false;
     }
 

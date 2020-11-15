@@ -24,6 +24,19 @@ public class Resources {
     public static long Money;
 
     /**
+     * Number of times the player has entered something successfully.
+     */
+    public static long NumSuccesses;
+
+    /**
+     * Get the current level the player is on.
+     * @return The current level.
+     */
+    public static long GetLevel() {
+        return NumSuccesses / 10;
+    }
+
+    /**
      * Draw a texture.
      * @param id ID.
      * @param pos Position.

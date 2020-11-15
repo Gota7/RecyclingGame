@@ -1,11 +1,8 @@
 package com.grey20;
 
-import raylib.Color;
-
 import raylib.*;
-import static raylib.Color.*;
+
 import static raylib.Raylib.*;
-import static raylib.TextureFilterMode.*;
 
 /**
  * Item.
@@ -41,6 +38,11 @@ public class Item {
     }
 
     /**
+     * Null position.
+     */
+    public static final int POS_NULL = -100000;
+
+    /**
      * Name of the texture to display.
      */
     public String TextureName;
@@ -61,6 +63,16 @@ public class Item {
     public Vector2 HitboxWidthHeight;
 
     /**
+     * Velocity.
+     */
+    public Vector2 Velocity;
+
+    /**
+     * Acceleration.
+     */
+    public Vector2 Acceleration;
+
+    /**
      * If you can see the item or not.
      */
     public boolean Visible;
@@ -69,6 +81,11 @@ public class Item {
      * Current state of the item.
      */
     public State CurrentState;
+
+    /**
+     * Bin it is in.
+     */
+    public String Bin;
 
     /**
      * If object is dead.
@@ -101,7 +118,26 @@ public class Item {
         }
     }
 
+    /**
+     * Do the falling state.
+     */
     private void DoFallState() {
+
+        //Get vars.
+        //Velocity = new Vector2();
+
+        //Check for grabbing.
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (Main.UpdateBinIntersection(this)) {
+                CurrentState = State.Grabbed;
+            }
+        }
+
+        //Check for out of bounds.
+        if (Position.getY() > Main.HEIGHT) {
+            Bin = null;
+            CurrentState = State.Destroy;
+        }
 
     }
 
@@ -109,8 +145,9 @@ public class Item {
      * Do grabbing state.
      */
     private void DoGrabbingState() {
+        Position = new Vector2(GetMouseX() - HitboxWidthHeight.getX() / 2, GetMouseY() - HitboxWidthHeight.getY() / 2);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            if (Main.DoesItemIntersectWithBin(this)) {
+            if (Main.UpdateBinIntersection(this)) {
                 CurrentState = State.Destroy;
             } else {
                 CurrentState = State.Falling;
@@ -123,8 +160,8 @@ public class Item {
      */
     private void DoDestroyState() {
         Visible = false;
-        Position.setX(-10000);
-        Position.setY(-10000);
+        Position.setX(POS_NULL);
+        Position.setY(POS_NULL);
         Dead = true;
     }
 
