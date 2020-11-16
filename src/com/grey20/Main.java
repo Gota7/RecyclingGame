@@ -189,8 +189,8 @@ public class Main {
 
         // Game over.
         if (IsGameOver) {
-            DrawText("GAMEOVER", 100, 100, 100, Resources.White);
-            DrawText("Right click to play again!", 200, 300, 30, Resources.White);
+            DrawText("GAMEOVER", 210, 250, 100, Resources.Red);
+            DrawText("Right click to play again!", 310, 350, 30, Resources.White);
             return;
         }
 
@@ -198,14 +198,14 @@ public class Main {
         DrawText("Money: $" + Resources.Money, 10, 10, 50, Resources.White);
 
         // Kills
-        DrawText("Kills: " + Resources.Kills, 10, 60, 50, Resources.White);
+        DrawText("Kills: " + Resources.Kills, 10, 60, 50, Resources.Red);
 
         // Bins.
         DrawTexture(Resources.Textures.get("Bins"), 0, 0, Resources.White);
 
-        //Current message.
+        // Current message.
         if (CurrentMessage != null) {
-            DrawText(CurrentMessage, 150, 300, 40, Resources.White);
+            DrawText(CurrentMessage, 150, 300, 40, Resources.Red);
             if (CurrentTexture != null) {
                 DrawTexture(CurrentTexture, 500, 275, Resources.White);
             }
@@ -345,7 +345,7 @@ public class Main {
             } else if (item.MaterialType == Material.Plastic6) {
                 answer += plasticRewards[3];
                 CurrentMessage = "Sometimes its possible to\nrecycle plastic 6 (PS).\n"
-                                + "Consult your local recycling\ncollection services.";
+                        + "Consult your local recycling\ncollection services.";
                 CurrentTexture = null;
                 MessageTimer = 150;
             } else if (item.MaterialType == Material.Plastic7) {

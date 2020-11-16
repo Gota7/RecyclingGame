@@ -22,6 +22,7 @@ public class Resources {
      * White color.
      */
     public static Color White = new Color(255, 255, 255);
+    public static Color Red = new Color(255, 0, 0);
 
     /**
      * Money and kills the player has.
